@@ -122,6 +122,19 @@ $botman->hears('/save-refund {amount} {categoryId} {description}', function (Bot
     $bot->reply(sprintf('Сохранено возврат %s в %s с описанием: %s', $amount, $categoryName, $description));
 });
 
+$botman->hears('limit {category}', function (BotMan $bot, $category) {
+    $limit = collect(callApi('GET', 'budgets')['budgets'])->first(function ($limit) use ($category) {
+        return $limit['name'] === $category || substr($limit['name'], 0, strlen($category)) === $category;
+    });
+
+    if (!$limit) {
+        $bot->reply('Не найдено');
+        return;
+    }
+
+    $bot->reply($limit['balance']);
+});
+
 $botman->hears('Start conversation', BotManController::class . '@startConversation');
 
 $botman->fallback(function ($bot) {
