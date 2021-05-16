@@ -124,7 +124,9 @@ $botman->hears('/save-refund {amount} {categoryId} {description}', function (Bot
 
 $botman->hears('limit {category}', function (BotMan $bot, $category) {
     $limit = collect(callApi('GET', 'budgets')['budgets'])->first(function ($limit) use ($category) {
-        return $limit['name'] === $category || substr($limit['name'], 0, strlen($category)) === $category;
+        $limitName = strtolower($limit['name']);
+        $categoryName = strtolower($category);
+        return $limitName === $categoryName || substr($limitName, 0, strlen($categoryName)) === $categoryName;
     });
 
     if (!$limit) {
