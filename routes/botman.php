@@ -12,12 +12,12 @@ $botman->hears('/start', function ($bot) {
     $bot->reply('Привет. Я бот для Buxfer');
 });
 
-$botman->hears('add {context}', [Add::class]);
-$botman->hears('refund {context}', [Refund::class]);
-$botman->hears('limit {context}', [Limit::class]);
+$botman->hears('add {context}', Add::class);
+$botman->hears('refund {context}', Refund::class);
+$botman->hears('limit {context}', Limit::class);
 
-$botman->hears('__add_transaction {context}', [AddTransaction::class]);
-$botman->hears('__add_transaction_refund {context}', [AddRefund::class]);
+$botman->hears('__add_transaction {context}', AddTransaction::class);
+$botman->hears('__add_transaction_refund {context}', AddRefund::class);
 
 $botman->fallback(function ($bot) {
     $bot->reply('Ниче не понял. Скажи нормально');
