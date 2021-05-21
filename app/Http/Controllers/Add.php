@@ -2,32 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ContextParser;
-use BotMan\BotMan\BotMan;
+use App\Context\AmountDescriptionContext;
+use App\Context\Context;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
 
 class Add extends Action
 {
-    public function contextType(): string
+    public $context = AmountDescriptionContext::class;
+
+    public function signature(): array
     {
-        return ContextParser::AMOUNT_DESCRIPTION;
+        return [
+            'add <сумма> <описание>',
+            'a <сумма> <описание>',
+            'или просто <сумма> <описание> без комманды',
+        ];
     }
 
-    public function signature(): string
+    /**
+     * @param AmountDescriptionContext $context
+     */
+    public function handle(Context $context): void
     {
-        return 'add <сумма> <описание>';
-    }
-
-    public function __invoke(BotMan $bot, string $context): void
-    {
-        $this->context = $context;
-
         $categories = $this->apiService->getCategories();
 
-        if (!$this->contextIsValid()) {
-            $bot->reply($this->unclearContextReply());
-            return;
-        }
+        $buttons = $categories
+            ->map(function ($category, $id) use ($context) {
+                return Button::create($category)
+                    ->value(sprintf('%s %s %s %s', '__add_transaction', $context->getAmount(), $id, $context->getDescription()));
+            })->toArray();
 
-        $bot->reply($this->askForCategory('__add_transaction', $categories));
+        $this->bot->reply(Question::create('Выбери категорию')->addButtons($buttons));
     }
 }

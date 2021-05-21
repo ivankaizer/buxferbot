@@ -2,20 +2,17 @@
 
 namespace App\Services;
 
+use App\Context\AmountCategoryDescriptionContext;
+use App\Context\AmountDescriptionContext;
+use App\Context\DescriptionContext;
 use App\Exceptions\UnclearContext;
 
 class ContextParser
 {
-    const AMOUNT_DESCRIPTION = 'amountDescription';
-
-    const DESCRIPTION = 'description';
-
-    const AMOUNT_CATEGORY_DESCRIPTION = 'amountCategoryDescription';
-
     /**
      * @throws UnclearContext
      */
-    public function amountDescription(string $context): array
+    public function amountDescription(string $context): AmountDescriptionContext
     {
         preg_match('/(.+?) (.+)/', $context, $matches);
 
@@ -25,10 +22,10 @@ class ContextParser
 
         [, $amount, $description] = $matches;
 
-        return [$amount, $description];
+        return new AmountDescriptionContext($amount, $description);
     }
 
-    public function amountCategoryDescription(string $context): array
+    public function amountCategoryDescription(string $context): AmountCategoryDescriptionContext
     {
         preg_match('/(.+?) \| (.+?) \| (.+)/', $context, $matches);
 
@@ -38,15 +35,15 @@ class ContextParser
 
         [, $amount, $category, $description] = $matches;
 
-        return [$amount, $category, $description];
+        return new AmountCategoryDescriptionContext($amount, $category, $description);
     }
 
-    public function description(string $context): array
+    public function description(string $context): DescriptionContext
     {
         if (!$context) {
             throw new UnclearContext();
         }
 
-        return [$context];
+        return new DescriptionContext($context);
     }
 }

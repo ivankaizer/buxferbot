@@ -13,13 +13,29 @@ $botman->hears('/start', function ($bot) {
 });
 
 $botman->hears('add {context}', Add::class);
+//$botman->hears('add! {context}');
+$botman->hears('a {context}', Add::class);
+
 $botman->hears('refund {context}', Refund::class);
+$botman->hears('r {context}', Refund::class);
+
 $botman->hears('limit {context}', Limit::class);
+$botman->hears('l {context}', Limit::class);
+
+//$botman->hears('h');
+//$botman->hears('help');
+//$botman->hears('?');
+
+//$botman->hears('shortcut {context}');
+//$botman->hears('shortcuts');
+//$botman->hears('s');
+//$botman->hears('sl');
+
+//$botman->hears('login {context}');
+//$botman->hears('logout');
 
 $botman->hears('__add_transaction {context}', AddTransaction::class);
 $botman->hears('__add_transaction_refund {context}', AddRefund::class);
 
-$botman->fallback(function ($bot) {
-    $bot->reply('Ниче не понял. Скажи нормально');
-});
+$botman->fallback(Add::class);
 

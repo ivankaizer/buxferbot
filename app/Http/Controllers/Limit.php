@@ -2,44 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ContextParser;
+use App\Context\Context;
+use App\Context\DescriptionContext;
 use App\Services\Helper;
-use BotMan\BotMan\BotMan;
 
 class Limit extends Action
 {
-    public function contextType(): string
+    public $context = DescriptionContext::class;
+
+    public function signature(): array
     {
-        return ContextParser::DESCRIPTION;
+        return [
+            'limit <категория>',
+            'l <категория>',
+        ];
     }
 
-    public function signature(): string
+    /**
+     * @param DescriptionContext $context
+     */
+    public function handle(Context $context): void
     {
-        return 'limit <категория>';
-    }
-
-    public function __invoke(BotMan $bot, string $context): void
-    {
-        $this->context = $context;
-
         $budgets = $this->apiService->getBudgets();
 
-        if (!$this->contextIsValid()) {
-            $bot->reply($this->unclearContextReply());
-            return;
-        }
-
-        [$category] = $this->resolveContext();
-
-        $limit = $budgets->first(function ($limit) use ($category) {
-            return Helper::startsWith($limit->name, strtolower($category));
+        $limit = $budgets->first(function ($limit) use ($context) {
+            return Helper::startsWith($limit->name, strtolower($context->getDescription()));
         });
 
         if (!$limit) {
-            $bot->reply($bot->reply($this->unclearContextReply()));
+            $this->bot->reply($this->unclearContextReply());
             return;
         }
 
-        $bot->reply(sprintf('%s: %s', $limit->name, $limit->balance));
+        $this->bot->reply(sprintf('%s: %s', $limit->name, $limit->balance));
     }
 }

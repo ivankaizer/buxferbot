@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Context\AmountCategoryDescriptionContext;
+use App\Context\AmountDescriptionContext;
+use App\Context\Context;
+use App\Context\DescriptionContext;
 use App\Exceptions\UnclearContext;
+use App\Services\AccountCreator;
 use App\Services\ApiService;
 use App\Services\ContextParser;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\Question;
-use Illuminate\Support\Collection;
+use BotMan\BotMan\BotMan;
 
 abstract class Action
 {
+    public $context;
+
     /**
      * @var ApiService
      */
@@ -21,39 +26,56 @@ abstract class Action
      */
     protected $contextParser;
 
-    protected $context;
+    protected $rawContext;
 
-    public function __construct(ApiService $apiService, ContextParser $contextParser)
+    /**
+     * @var BotMan
+     */
+    protected $bot;
+
+    /**
+     * @var AccountCreator
+     */
+    protected $accountCreator;
+
+    public function __construct(ApiService $apiService, ContextParser $contextParser, AccountCreator $accountCreator)
     {
         $this->apiService = $apiService;
         $this->contextParser = $contextParser;
+        $this->accountCreator = $accountCreator;
     }
 
-    abstract public function contextType(): string;
-
-    public function signature(): string
+    public function __invoke(BotMan $bot, string $context): void
     {
-        return "";
-    }
+        $this->rawContext = $context;
+        $this->bot = $bot;
 
-    public function isVisibleInMenu(): bool
-    {
-        return true;
-    }
-
-    public function resolveContext(): array
-    {
-        try {
-            return call_user_func_array([$this->contextParser, $this->contextType()], [$this->context]);
-        } catch (UnclearContext $exception) {
-            return [];
+        if (!$this->contextIsValid()) {
+            $bot->reply($this->unclearContextReply());
+            return;
         }
+
+        $context = $this->resolveContext();
+
+        $this->handle($context);
+    }
+
+    abstract public function handle(Context $context): void;
+
+    public function signature(): array
+    {
+        return [];
+    }
+
+    public function resolveContext(): Context
+    {
+        return $this->callContext();
     }
 
     public function contextIsValid(): bool
     {
         try {
-            call_user_func_array([$this->contextParser, $this->contextType()], [$this->context]);
+            $this->callContext();
             return true;
         } catch (UnclearContext $exception) {
             return false;
@@ -62,19 +84,24 @@ abstract class Action
 
     public function unclearContextReply(): string
     {
-        return 'Не понимаю. Попробуй ' . $this->signature();
+        return 'Не понимаю. Попробуй ' . implode(', ', $this->signature());
     }
 
-    protected function askForCategory(string $url, Collection $categories): Question
+    /**
+     * @return Context
+     * @throws UnclearContext
+     */
+    private function callContext(): Context
     {
-        [$amount, $description] = $this->resolveContext();
-
-        $buttons = $categories
-            ->map(function ($category, $id) use ($url, $amount, $description) {
-                return Button::create($category)
-                    ->value(sprintf('%s %s %s %s', $url, $amount, $id, $description));
-            })->toArray();
-
-        return Question::create('Выбери категорию')->addButtons($buttons);
+        switch ($this->context) {
+            case AmountDescriptionContext::class:
+                return $this->contextParser->amountDescription($this->rawContext);
+            case AmountCategoryDescriptionContext::class:
+                return $this->contextParser->amountCategoryDescription($this->rawContext);
+            case DescriptionContext::class:
+                return $this->contextParser->description($this->rawContext);
+            default:
+                throw new \InvalidArgumentException(sprintf('Context %s is not known.', $this->context));
+        }
     }
 }
