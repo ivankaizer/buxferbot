@@ -7,6 +7,7 @@ use App\Context\AmountDescriptionContext;
 use App\Context\Context;
 use App\Context\DescriptionContext;
 use App\Context\EmptyContext;
+use App\Context\TokenAccountContext;
 use App\Exceptions\UnclearContext;
 use App\Services\TransactionCreator;
 use App\Services\ApiService;
@@ -106,6 +107,8 @@ abstract class Action
     private function callContext(): Context
     {
         switch ($this->context) {
+            case TokenAccountContext::class:
+                return $this->contextParser->tokenAccount($this->rawContext);
             case AmountDescriptionContext::class:
                 return $this->contextParser->amountDescription($this->rawContext);
             case AmountCategoryDescriptionContext::class:

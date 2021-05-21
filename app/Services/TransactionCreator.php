@@ -15,7 +15,7 @@ class TransactionCreator
             'amount' => $finalAmount,
             'status' => 'cleared',
             'description' => sprintf('%s %s', $description, $source),
-            'accountId' => 1199540, // @todo
+            'accountId' => auth()->user()->account_id,
             'date' => date('Y-m-d'),
             'tags' => $category,
         ];

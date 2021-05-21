@@ -15,8 +15,9 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('buxfer_token');
             $table->string('telegram_id')->unique();
+            $table->string('buxfer_token');
+            $table->string('account_id');
         });
     }
 

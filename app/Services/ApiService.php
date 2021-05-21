@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\ApiError;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
 
@@ -19,7 +20,6 @@ class ApiService
 
     public function __construct(Client $client)
     {
-        $this->buxferToken = env('BUXFER_TOKEN');
         $this->httpClient = $client;
     }
 
@@ -42,12 +42,25 @@ class ApiService
         return collect($budgets);
     }
 
+    public function getAccounts(): Collection
+    {
+        $accounts = data_get($this->get('accounts'), 'accounts', []);
+
+        return collect($accounts)->unique('name')
+            ->pluck('name', 'id');
+    }
+
+    public function setToken(string $token): void
+    {
+        $this->buxferToken = $token;
+    }
+
     private function generateUrl(string $endpoint): string
     {
         return sprintf(
             'https://www.buxfer.com/api/%s?token=%s',
             $endpoint,
-            $this->buxferToken
+            $this->buxferToken ?: auth()->user()->buxfer_token
         );
     }
 
@@ -66,9 +79,13 @@ class ApiService
 
     private function get(string $endpoint): array
     {
-        $response = $this->httpClient->get(
-            $this->generateUrl($endpoint)
-        );
+        try {
+            $response = $this->httpClient->get(
+                $this->generateUrl($endpoint)
+            );
+        } catch (\Exception $e) {
+            throw new ApiError();
+        }
 
         $json = json_decode($response->getBody()->getContents(), true);
 

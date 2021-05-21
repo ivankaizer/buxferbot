@@ -3,8 +3,10 @@
 use App\Http\Controllers\Add;
 use App\Http\Controllers\AddRefund;
 use App\Http\Controllers\AddTransaction;
+use App\Http\Controllers\CreateUser;
 use App\Http\Controllers\Help;
 use App\Http\Controllers\Limit;
+use App\Http\Controllers\Login;
 use App\Http\Controllers\Refund;
 
 $botman = resolve('botman');
@@ -32,11 +34,11 @@ $botman->hears('help', Help::class);
 //$botman->hears('shortcuts');
 //$botman->hears('sl');
 
-//$botman->hears('login {context}');
-//$botman->hears('logout');
+$botman->hears('login {context}', Login::class);
 
 $botman->hears('__add_transaction {context}', AddTransaction::class);
 $botman->hears('__add_transaction_refund {context}', AddRefund::class);
+$botman->hears('__create_user {context}', CreateUser::class);
 
 $botman->fallback(function ($bot) {
     $bot->reply('Не понимаю. Попробуй help');

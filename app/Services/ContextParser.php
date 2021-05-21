@@ -6,10 +6,18 @@ use App\Context\AmountCategoryDescriptionContext;
 use App\Context\AmountDescriptionContext;
 use App\Context\DescriptionContext;
 use App\Context\EmptyContext;
+use App\Context\TokenAccountContext;
 use App\Exceptions\UnclearContext;
 
 class ContextParser
 {
+    public function tokenAccount(string $context): TokenAccountContext
+    {
+        $context = $this->amountDescription($context);
+
+        return new TokenAccountContext($context->getAmount(), $context->getDescription());
+    }
+
     /**
      * @throws UnclearContext
      */
