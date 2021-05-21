@@ -16,6 +16,8 @@ class CreateShortcutsTable extends Migration
         Schema::create('shortcuts', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
+            $table->string('short_name');
+            $table->string('category_name');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Context\AmountCategoryDescriptionContext;
 use App\Context\Context;
-use Illuminate\Support\Facades\Log;
 
 class AddTransaction extends Action
 {
