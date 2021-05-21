@@ -26,7 +26,7 @@ class Limit extends Action
         $budgets = $this->apiService->getBudgets();
 
         $limit = $budgets->first(function ($limit) use ($context) {
-            return Helper::startsWith($limit->name, strtolower($context->getDescription()));
+            return Helper::startsWith(strtolower($limit['name']), strtolower($context->getDescription()));
         });
 
         if (!$limit) {
@@ -34,6 +34,10 @@ class Limit extends Action
             return;
         }
 
-        $this->bot->reply(sprintf('%s: %s', $limit->name, $limit->balance));
+        if (!isset($limit['balance'])) {
+            $this->bot->reply(sprintf('Для %s не установлено лимита', $limit['name']));
+        }
+
+        $this->bot->reply(sprintf('%s: %s', $limit['name'], $limit['balance']));
     }
 }

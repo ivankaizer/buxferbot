@@ -37,5 +37,7 @@ $botman->hears('l {context}', Limit::class);
 $botman->hears('__add_transaction {context}', AddTransaction::class);
 $botman->hears('__add_transaction_refund {context}', AddRefund::class);
 
-$botman->fallback(Add::class);
+$botman->fallback(function ($bot) {
+    $bot->reply('Не понимаю. Попробуй help');
+});
 

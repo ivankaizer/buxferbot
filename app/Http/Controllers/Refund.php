@@ -29,7 +29,7 @@ class Refund extends Action
         $buttons = $categories
             ->map(function ($category, $id) use ($context) {
                 return Button::create($category)
-                    ->value(sprintf('%s %s %s %s', '__add_transaction_refund', $context->getAmount(), $id, $context->getDescription()));
+                    ->value(sprintf('%s %s | %s | %s', '__add_transaction_refund', $context->getAmount(), $id, $context->getDescription()));
             })->toArray();
 
         $this->bot->reply(Question::create('Выбери категорию')->addButtons($buttons));

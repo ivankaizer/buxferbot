@@ -7,10 +7,11 @@ use App\Context\AmountDescriptionContext;
 use App\Context\Context;
 use App\Context\DescriptionContext;
 use App\Exceptions\UnclearContext;
-use App\Services\AccountCreator;
+use App\Services\TransactionCreator;
 use App\Services\ApiService;
 use App\Services\ContextParser;
 use BotMan\BotMan\BotMan;
+use Illuminate\Support\Facades\Log;
 
 abstract class Action
 {
@@ -34,11 +35,11 @@ abstract class Action
     protected $bot;
 
     /**
-     * @var AccountCreator
+     * @var TransactionCreator
      */
     protected $accountCreator;
 
-    public function __construct(ApiService $apiService, ContextParser $contextParser, AccountCreator $accountCreator)
+    public function __construct(ApiService $apiService, ContextParser $contextParser, TransactionCreator $accountCreator)
     {
         $this->apiService = $apiService;
         $this->contextParser = $contextParser;
@@ -84,7 +85,7 @@ abstract class Action
 
     public function unclearContextReply(): string
     {
-        return 'Не понимаю. Попробуй ' . implode(', ', $this->signature());
+        return "Не понимаю. Попробуй: \n\n" . implode("\n", $this->signature());
     }
 
     /**
