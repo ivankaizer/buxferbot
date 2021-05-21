@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Context\AmountCategoryDescriptionContext;
 use App\Context\AmountDescriptionContext;
 use App\Context\DescriptionContext;
+use App\Context\EmptyContext;
 use App\Exceptions\UnclearContext;
 
 class ContextParser
@@ -45,5 +46,10 @@ class ContextParser
         }
 
         return new DescriptionContext($context);
+    }
+
+    public function emptyContext(): EmptyContext
+    {
+        return new EmptyContext();
     }
 }

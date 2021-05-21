@@ -3,6 +3,7 @@
 use App\Http\Controllers\Add;
 use App\Http\Controllers\AddRefund;
 use App\Http\Controllers\AddTransaction;
+use App\Http\Controllers\Help;
 use App\Http\Controllers\Limit;
 use App\Http\Controllers\Refund;
 
@@ -22,9 +23,8 @@ $botman->hears('r {context}', Refund::class);
 $botman->hears('limit {context}', Limit::class);
 $botman->hears('l {context}', Limit::class);
 
-//$botman->hears('h');
-//$botman->hears('help');
-//$botman->hears('?');
+$botman->hears('h', Help::class);
+$botman->hears('help', Help::class);
 
 //$botman->hears('shortcut {context}');
 //$botman->hears('shortcuts');

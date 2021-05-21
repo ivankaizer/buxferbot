@@ -6,6 +6,7 @@ use App\Context\AmountCategoryDescriptionContext;
 use App\Context\AmountDescriptionContext;
 use App\Context\Context;
 use App\Context\DescriptionContext;
+use App\Context\EmptyContext;
 use App\Exceptions\UnclearContext;
 use App\Services\TransactionCreator;
 use App\Services\ApiService;
@@ -46,10 +47,15 @@ abstract class Action
         $this->accountCreator = $accountCreator;
     }
 
-    public function __invoke(BotMan $bot, string $context): void
+    public function __invoke(BotMan $bot, string $context = ""): void
     {
         $this->rawContext = $context;
         $this->bot = $bot;
+
+        if ($this->rawContext === '?') {
+            $this->bot->reply($this->helpMessage());
+            return;
+        }
 
         if (!$this->contextIsValid()) {
             $bot->reply($this->unclearContextReply());
@@ -85,7 +91,12 @@ abstract class Action
 
     public function unclearContextReply(): string
     {
-        return "Не понимаю. Попробуй: \n\n" . implode("\n", $this->signature());
+        return "Не понимаю. Попробуй: \n\n" . $this->helpMessage();
+    }
+
+    public function helpMessage(): string
+    {
+        return implode("\n", $this->signature());
     }
 
     /**
@@ -101,6 +112,8 @@ abstract class Action
                 return $this->contextParser->amountCategoryDescription($this->rawContext);
             case DescriptionContext::class:
                 return $this->contextParser->description($this->rawContext);
+            case EmptyContext::class:
+                return $this->contextParser->emptyContext();
             default:
                 throw new \InvalidArgumentException(sprintf('Context %s is not known.', $this->context));
         }
