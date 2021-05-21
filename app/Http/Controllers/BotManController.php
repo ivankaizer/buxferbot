@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\AttachUser;
 use BotMan\BotMan\BotMan;
 
 class BotManController extends Controller
@@ -11,7 +12,10 @@ class BotManController extends Controller
      */
     public function handle()
     {
+        /** @var BotMan $botman */
         $botman = app('botman');
+
+        $botman->middleware->heard(new AttachUser());
 
         $botman->listen();
     }

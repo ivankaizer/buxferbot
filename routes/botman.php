@@ -27,8 +27,9 @@ $botman->hears('h', Help::class);
 $botman->hears('help', Help::class);
 
 //$botman->hears('shortcut {context}');
-//$botman->hears('shortcuts');
 //$botman->hears('s');
+
+//$botman->hears('shortcuts');
 //$botman->hears('sl');
 
 //$botman->hears('login {context}');
