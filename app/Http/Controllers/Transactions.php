@@ -11,6 +11,14 @@ class Transactions extends Action
 {
     public $context = DescriptionContext::class;
 
+    public function signature(): array
+    {
+        return [
+            'transactions <категория>',
+            't <категория>',
+        ];
+    }
+
     /**
      * @param DescriptionContext $context
      */
