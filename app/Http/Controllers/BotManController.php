@@ -12,12 +12,12 @@ class BotManController extends Controller
      */
     public function handle()
     {
-        /** @var BotMan $botman */
-        $botman = app('botman');
-
-        $botman->middleware->heard(new AttachUser());
-
         try {
+            /** @var BotMan $botman */
+            $botman = app('botman');
+
+            $botman->middleware->heard(new AttachUser());
+
             $botman->listen();
         } catch (\Exception $e) {
             $botman->reply('Ошибка.');
