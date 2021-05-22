@@ -21,9 +21,11 @@ $botman->hears('/start', function ($bot) {
 
 $botman->hears('add {context}', Add::class);
 $botman->hears('a {context}', Add::class);
+$botman->hears('- {context}', Add::class);
 
 $botman->hears('refund {context}', Refund::class);
 $botman->hears('r {context}', Refund::class);
+$botman->hears('+ {context}', Refund::class);
 
 $botman->hears('limit {context}', Limit::class);
 $botman->hears('l {context}', Limit::class);
