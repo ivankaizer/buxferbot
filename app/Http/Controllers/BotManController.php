@@ -17,7 +17,11 @@ class BotManController extends Controller
 
         $botman->middleware->heard(new AttachUser());
 
-        $botman->listen();
+        try {
+            $botman->listen();
+        } catch (\Exception $e) {
+            $botman->reply('Ошибка.');
+        }
     }
 
     /**
