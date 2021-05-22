@@ -23,7 +23,7 @@ class ContextParser
      */
     public function amountDescription(string $context): AmountDescriptionContext
     {
-        preg_match('/(.+?) (.+)/', $context, $matches);
+        preg_match('/([\d.,]+?) (.+)/', $context, $matches);
 
         if (empty($matches)) {
             throw new UnclearContext;
@@ -36,7 +36,7 @@ class ContextParser
 
     public function amountCategoryDescription(string $context): AmountCategoryDescriptionContext
     {
-        preg_match('/(.+?) \| (.+?) \| (.+)/', $context, $matches);
+        preg_match('/([\d.,]+?) \| (.+?) \| (.+)/', $context, $matches);
 
         if (empty($matches)) {
             throw new UnclearContext;

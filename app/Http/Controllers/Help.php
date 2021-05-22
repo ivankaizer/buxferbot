@@ -12,7 +12,7 @@ class Help extends Action
     public $context = EmptyContext::class;
 
     public $commands = [
-        'add', 'limit', 'refund', 'shortcuts', 'shortcut',
+        'add', 'limit', 'refund', 'shortcuts', 'shortcut', 'transactions',
     ];
 
     /**

@@ -16,10 +16,31 @@ class ContextParserTest extends TestCase
     {
         $parser = new ContextParser();
 
+        $this->assertEquals(new AmountDescriptionContext('10', 'food'), $parser->amountDescription('5 food'));
         $this->assertEquals(new AmountDescriptionContext('10', 'food'), $parser->amountDescription('10 food'));
         $this->assertEquals(new AmountDescriptionContext('10.30', 'sport food'), $parser->amountDescription('10.30 sport food'));
         $this->assertEquals(new AmountDescriptionContext('10.3', 'sport food subscription'), $parser->amountDescription('10.3 sport food subscription'));
         $this->assertEquals(new AmountDescriptionContext('10,25', 'sport food subscription service'), $parser->amountDescription('10,25 sport food subscription service'));
+    }
+
+    /** @test */
+    public function amount_description_parser_should_not_accept_text_as_amount_value()
+    {
+        $parser = new ContextParser();
+
+        $this->expectException(UnclearContext::class);
+
+        $parser->amountDescription('food 10');
+    }
+
+    /** @test */
+    public function amount_category_description_parser_should_not_accept_text_as_amount_value()
+    {
+        $parser = new ContextParser();
+
+        $this->expectException(UnclearContext::class);
+
+        $parser->amountCategoryDescription('food 10 test');
     }
 
     /** @test */

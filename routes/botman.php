@@ -11,6 +11,7 @@ use App\Http\Controllers\Login;
 use App\Http\Controllers\Refund;
 use App\Http\Controllers\Shortcuts;
 use App\Http\Controllers\Shortcut;
+use App\Http\Controllers\Transactions;
 
 $botman = resolve('botman');
 
@@ -39,6 +40,9 @@ $botman->hears('sl {context}', Shortcuts::class);
 $botman->hears('sl', Shortcuts::class);
 
 $botman->hears('login {context}', Login::class);
+
+$botman->hears('transactions {context}', Transactions::class);
+$botman->hears('t {context}', Transactions::class);
 
 $botman->hears('__add_transaction {context}', AddTransaction::class);
 $botman->hears('__add_transaction_refund {context}', AddRefund::class);

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\ApiError;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
+use function GuzzleHttp\Psr7\build_query;
 
 class ApiService
 {
@@ -50,17 +51,42 @@ class ApiService
             ->pluck('name', 'id');
     }
 
+    public function getTransactions()
+    {
+        $params = [
+            'accountId' => auth()->user()->account_id,
+            'month' => strtolower(date('My')),
+            'status' => 'cleared',
+        ];
+
+        $transactions = collect([]);
+
+        $response = $this->get('transactions', $params);
+        $transactions = $transactions->merge($response['transactions']);
+        $count = $response['numTransactions'];
+
+        $pages = ceil($count / 25);
+
+        foreach (range(2, $pages) as $page) {
+            $response = $this->get('transactions', array_merge($params, ['page' => $page]));
+            $transactions = $transactions->merge($response['transactions']);
+        }
+
+        return $transactions;
+    }
+
     public function setToken(string $token): void
     {
         $this->buxferToken = $token;
     }
 
-    private function generateUrl(string $endpoint): string
+    private function generateUrl(string $endpoint, array $params): string
     {
         return sprintf(
-            'https://www.buxfer.com/api/%s?token=%s',
+            'https://www.buxfer.com/api/%s?token=%s&%s',
             $endpoint,
-            $this->buxferToken ?: auth()->user()->buxfer_token
+            $this->buxferToken ?: auth()->user()->buxfer_token,
+            build_query($params)
         );
     }
 
@@ -72,16 +98,16 @@ class ApiService
     private function post(string $endpoint, array $body): void
     {
         $this->httpClient->post(
-            $this->generateUrl($endpoint),
+            $this->generateUrl($endpoint, []),
             ['form_params' => $body]
         );
     }
 
-    private function get(string $endpoint): array
+    private function get(string $endpoint, array $params = []): array
     {
         try {
             $response = $this->httpClient->get(
-                $this->generateUrl($endpoint)
+                $this->generateUrl($endpoint, $params)
             );
         } catch (\Exception $e) {
             throw new ApiError();
