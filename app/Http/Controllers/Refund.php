@@ -11,6 +11,7 @@ class Refund extends AbstractSaveAction
         return [
             'refund <сумма> <описание>',
             'r <сумма> <описание>',
+            '+ <сумма> <описание>',
         ];
     }
 

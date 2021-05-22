@@ -11,6 +11,7 @@ class Add extends AbstractSaveAction
         return [
             'add <сумма> <описание>',
             'a <сумма> <описание>',
+            '- <сумма> <описание>',
         ];
     }
 
