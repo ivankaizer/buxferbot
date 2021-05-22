@@ -14,9 +14,9 @@ class ContextParser
 {
     public function tokenAccount(string $context): TokenAccountContext
     {
-        $context = $this->amountDescription($context);
+        $context = $this->keywordCategory($context);
 
-        return new TokenAccountContext($context->getAmount(), $context->getDescription());
+        return new TokenAccountContext($context->getKeyword(), $context->getCategory());
     }
 
     /**
