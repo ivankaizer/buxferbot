@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\TransactionWasAdded;
 use App\Exceptions\ApiError;
 use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
@@ -93,6 +94,11 @@ class ApiService
     public function addTransaction(array $transaction)
     {
         $this->post('add_transaction', $transaction);
+
+        event(new TransactionWasAdded(
+            auth()->user()->id,
+            $transaction
+        ));
     }
 
     private function post(string $endpoint, array $body): void
