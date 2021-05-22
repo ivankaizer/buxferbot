@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Context\AmountCategoryDescriptionContext;
 use App\Context\AmountDescriptionContext;
 use App\Context\DescriptionContext;
+use App\Context\KeywordCategoryContext;
 use App\Exceptions\UnclearContext;
 use App\Services\ContextParser;
 use Tests\TestCase;
@@ -16,11 +17,23 @@ class ContextParserTest extends TestCase
     {
         $parser = new ContextParser();
 
-        $this->assertEquals(new AmountDescriptionContext('10', 'food'), $parser->amountDescription('5 food'));
+        $this->assertEquals(new AmountDescriptionContext('5', 'food'), $parser->amountDescription('5 food'));
         $this->assertEquals(new AmountDescriptionContext('10', 'food'), $parser->amountDescription('10 food'));
         $this->assertEquals(new AmountDescriptionContext('10.30', 'sport food'), $parser->amountDescription('10.30 sport food'));
         $this->assertEquals(new AmountDescriptionContext('10.3', 'sport food subscription'), $parser->amountDescription('10.3 sport food subscription'));
         $this->assertEquals(new AmountDescriptionContext('10,25', 'sport food subscription service'), $parser->amountDescription('10,25 sport food subscription service'));
+    }
+
+    /** @test */
+    public function it_correctly_parses_keyword_category_method()
+    {
+        $parser = new ContextParser();
+
+        $this->assertEquals(new KeywordCategoryContext('5', 'food'), $parser->keywordCategory('5 food'));
+        $this->assertEquals(new KeywordCategoryContext('10', 'food'), $parser->keywordCategory('10 food'));
+        $this->assertEquals(new KeywordCategoryContext('10.30', 'sport food'), $parser->keywordCategory('10.30 sport food'));
+        $this->assertEquals(new KeywordCategoryContext('10.3', 'sport food subscription'), $parser->keywordCategory('10.3 sport food subscription'));
+        $this->assertEquals(new KeywordCategoryContext('10,25', 'sport food subscription service'), $parser->keywordCategory('10,25 sport food subscription service'));
     }
 
     /** @test */

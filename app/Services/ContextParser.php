@@ -6,6 +6,7 @@ use App\Context\AmountCategoryDescriptionContext;
 use App\Context\AmountDescriptionContext;
 use App\Context\DescriptionContext;
 use App\Context\EmptyContext;
+use App\Context\KeywordCategoryContext;
 use App\Context\TokenAccountContext;
 use App\Exceptions\UnclearContext;
 
@@ -32,6 +33,22 @@ class ContextParser
         [, $amount, $description] = $matches;
 
         return new AmountDescriptionContext($amount, $description);
+    }
+
+    /**
+     * @throws UnclearContext
+     */
+    public function keywordCategory(string $context): KeywordCategoryContext
+    {
+        preg_match('/(.+?) (.+)/', $context, $matches);
+
+        if (empty($matches)) {
+            throw new UnclearContext;
+        }
+
+        [, $keyword, $category] = $matches;
+
+        return new KeywordCategoryContext($keyword, $category);
     }
 
     public function amountCategoryDescription(string $context): AmountCategoryDescriptionContext

@@ -20,4 +20,9 @@ class TransactionCreator
             'tags' => $category,
         ];
     }
+
+    public function guessType(string $amount): string
+    {
+        return substr($amount, 0, 1) === '+' ? 'income' : 'expense';
+    }
 }

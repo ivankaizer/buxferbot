@@ -7,13 +7,13 @@ use App\Context\AmountDescriptionContext;
 use App\Context\Context;
 use App\Context\DescriptionContext;
 use App\Context\EmptyContext;
+use App\Context\KeywordCategoryContext;
 use App\Context\TokenAccountContext;
 use App\Exceptions\UnclearContext;
 use App\Services\TransactionCreator;
 use App\Services\ApiService;
 use App\Services\ContextParser;
 use BotMan\BotMan\BotMan;
-use Illuminate\Support\Facades\Log;
 
 abstract class Action
 {
@@ -39,13 +39,13 @@ abstract class Action
     /**
      * @var TransactionCreator
      */
-    protected $accountCreator;
+    protected $transactionCreator;
 
-    public function __construct(ApiService $apiService, ContextParser $contextParser, TransactionCreator $accountCreator)
+    public function __construct(ApiService $apiService, ContextParser $contextParser, TransactionCreator $transactionCreator)
     {
         $this->apiService = $apiService;
         $this->contextParser = $contextParser;
-        $this->accountCreator = $accountCreator;
+        $this->transactionCreator = $transactionCreator;
     }
 
     public function __invoke(BotMan $bot, string $context = ""): void
@@ -117,6 +117,8 @@ abstract class Action
                 return $this->contextParser->description($this->rawContext);
             case EmptyContext::class:
                 return $this->contextParser->emptyContext();
+            case KeywordCategoryContext::class:
+                return $this->contextParser->keywordCategory($this->rawContext);
             default:
                 throw new \InvalidArgumentException(sprintf('Context %s is not known.', $this->context));
         }

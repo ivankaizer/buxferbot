@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Context\AmountDescriptionContext;
 use App\Context\Context;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\Question;
 
-class Refund extends Action
+class Refund extends AbstractSaveAction
 {
-    public $context = AmountDescriptionContext::class;
-
     public function signature(): array
     {
         return [
@@ -19,19 +14,18 @@ class Refund extends Action
         ];
     }
 
-    /**
-     * @param AmountDescriptionContext $context
-     */
-    public function handle(Context $context): void
+    protected function getTypeFromAmount(Context $context): string
     {
-        $categories = $this->apiService->getCategories();
+        return 'refund';
+    }
 
-        $buttons = $categories
-            ->map(function ($category, $id) use ($context) {
-                return Button::create($category)
-                    ->value(sprintf('%s %s | %s | %s', '__add_transaction_refund', $context->getAmount(), $id, $context->getDescription()));
-            })->toArray();
+    protected function getAddRoute(): string
+    {
+        return '__add_transaction_refund';
+    }
 
-        $this->bot->reply(Question::create('Выбери категорию')->addButtons($buttons));
+    protected function getSavedText(): string
+    {
+        return 'Сохранено возврат';
     }
 }
