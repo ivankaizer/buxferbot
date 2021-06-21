@@ -22,6 +22,7 @@ class ContextParserTest extends TestCase
         $this->assertEquals(new AmountDescriptionContext('10.30', 'sport food'), $parser->amountDescription('10.30 sport food'));
         $this->assertEquals(new AmountDescriptionContext('10.3', 'sport food subscription'), $parser->amountDescription('10.3 sport food subscription'));
         $this->assertEquals(new AmountDescriptionContext('10,25', 'sport food subscription service'), $parser->amountDescription('10,25 sport food subscription service'));
+        $this->assertEquals(new AmountDescriptionContext('+10,25', 'sport food subscription service'), $parser->amountDescription('+10,25 sport food subscription service'));
     }
 
     /** @test */
@@ -34,6 +35,7 @@ class ContextParserTest extends TestCase
         $this->assertEquals(new KeywordCategoryContext('10.30', 'sport food'), $parser->keywordCategory('10.30 sport food'));
         $this->assertEquals(new KeywordCategoryContext('10.3', 'sport food subscription'), $parser->keywordCategory('10.3 sport food subscription'));
         $this->assertEquals(new KeywordCategoryContext('10,25', 'sport food subscription service'), $parser->keywordCategory('10,25 sport food subscription service'));
+        $this->assertEquals(new KeywordCategoryContext('+10,25', 'sport food subscription service'), $parser->keywordCategory('+10,25 sport food subscription service'));
     }
 
     /** @test */
