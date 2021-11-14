@@ -20,7 +20,7 @@ class BotManController extends Controller
 
             $botman->listen();
         } catch (\Exception $e) {
-            $botman->reply('Ошибка.');
+            $botman->reply('Error.');
             app('sentry')->captureException($e);
         }
     }

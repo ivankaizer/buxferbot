@@ -25,7 +25,7 @@ abstract class AbstractSaveAction extends Action
             $transaction = $this->transactionCreator->create($type, $context->getAmount(), $matchedShortcut->category_name, $context->getDescription());
             $this->apiService->addTransaction($transaction);
 
-            $this->bot->reply(sprintf('%s %s в %s с описанием: %s', $this->getSavedText(), $context->getAmount(), $matchedShortcut->category_name, $context->getDescription()));
+            $this->bot->reply(sprintf('%s %s in %s with description: %s', $this->getSavedText(), $context->getAmount(), $matchedShortcut->category_name, $context->getDescription()));
             return;
         }
 
@@ -35,7 +35,7 @@ abstract class AbstractSaveAction extends Action
                     ->value(sprintf('%s %s | %s | %s', $this->getAddRoute(), $context->getAmount(), $id, $context->getDescription()));
             })->toArray();
 
-        $this->bot->reply(Question::create('Выбери категорию')->addButtons($buttons));
+        $this->bot->reply(Question::create('Pick a category')->addButtons($buttons));
     }
 
     protected function getShortcutForContext(Context $context)

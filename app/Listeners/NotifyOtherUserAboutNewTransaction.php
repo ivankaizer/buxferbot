@@ -22,7 +22,7 @@ class NotifyOtherUserAboutNewTransaction
             $botman->sendRequest('sendMessage', [
                'chat_id' => $user->telegram_id,
                 'text' => sprintf(
-                    'Другой пользователь добавил: %s - %s - %s - %s',
+                    'Another user added: %s - %s - %s - %s',
                     $event->getType(),
                     $event->getAmount(),
                     $event->getCategory(),

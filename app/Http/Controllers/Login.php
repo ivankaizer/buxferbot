@@ -15,7 +15,7 @@ class Login extends Action
     public function signature(): array
     {
         return [
-            'login <токен buxfer>',
+            'login <buxfer token>',
         ];
     }
 
@@ -29,7 +29,7 @@ class Login extends Action
         try {
             $accounts = $this->apiService->getAccounts();
         } catch (ApiError $apiError) {
-            $this->bot->reply('Неправильный токен');
+            $this->bot->reply('Invalid token');
             return;
         }
 
@@ -39,6 +39,6 @@ class Login extends Action
                     ->value(sprintf('%s %s %s', '__create_user', $context->getDescription(), $id));
             })->toArray();
 
-        $this->bot->reply(Question::create('Выбери свой аккаунт')->addButtons($buttons));
+        $this->bot->reply(Question::create('Choose your account')->addButtons($buttons));
     }
 }

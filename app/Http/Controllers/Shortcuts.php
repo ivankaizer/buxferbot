@@ -30,7 +30,7 @@ class Shortcuts extends Action
         })->implode("\n");
 
         if ($shortcuts->isEmpty()) {
-            $this->bot->reply('Пусто');
+            $this->bot->reply('Empty');
             return;
         }
 

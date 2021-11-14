@@ -14,8 +14,8 @@ class Transactions extends Action
     public function signature(): array
     {
         return [
-            'transactions <категория>',
-            't <категория>',
+            'transactions <category>',
+            't <category>',
         ];
     }
 

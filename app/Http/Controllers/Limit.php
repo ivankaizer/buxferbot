@@ -13,8 +13,8 @@ class Limit extends Action
     public function signature(): array
     {
         return [
-            'limit <категория>',
-            'l <категория>',
+            'limit <category>',
+            'l <category>',
         ];
     }
 
@@ -35,7 +35,7 @@ class Limit extends Action
         }
 
         if (!isset($limit['balance'])) {
-            $this->bot->reply(sprintf('Для %s не установлено лимита', $limit['name']));
+            $this->bot->reply(sprintf('%s does not have a limit', $limit['name']));
         }
 
         $this->bot->reply(sprintf('%s: %s', $limit['name'], $limit['balance']));

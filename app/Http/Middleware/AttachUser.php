@@ -19,7 +19,7 @@ class AttachUser implements Heard
         $user = User::where('telegram_id', $bot->getUser()->getId())->first();
 
         if (!$user) {
-            $bot->reply('Сначала залогинься. Используй комманду login <токен buxfer>');
+            $bot->reply('Login first. Try `login <buxfer token>`');
             exit(0);
         }
 

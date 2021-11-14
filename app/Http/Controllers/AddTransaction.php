@@ -22,6 +22,6 @@ class AddTransaction extends Action
         $transaction = $this->transactionCreator->create($type, $context->getAmount(), $categoryName, $context->getDescription());
         $this->apiService->addTransaction($transaction);
 
-        $this->bot->reply(sprintf('Сохранено %s в %s с описанием: %s', $context->getAmount(), $categoryName, $context->getDescription()));
+        $this->bot->reply(sprintf('Saved %s in %s with description: %s', $context->getAmount(), $categoryName, $context->getDescription()));
     }
 }

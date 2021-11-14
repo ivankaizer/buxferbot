@@ -24,6 +24,6 @@ class Help extends Action
             return Button::create($command)->value(sprintf('%s ?', $command));
         }, $this->commands);
 
-        $this->bot->reply(Question::create('Выбери комманду')->addButtons($buttons));
+        $this->bot->reply(Question::create('Pick a command')->addButtons($buttons));
     }
 }

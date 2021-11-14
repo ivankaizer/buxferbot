@@ -21,7 +21,7 @@ class CreateUser extends Action
         try {
             $accounts = $this->apiService->getAccounts();
         } catch (ApiError $apiError) {
-            $this->bot->reply('Неправильный токен');
+            $this->bot->reply('Invalid token');
             return;
         }
 
@@ -34,6 +34,6 @@ class CreateUser extends Action
         ]);
         $user->save();
 
-        $this->bot->reply(sprintf('Добро пожаловать. Выбранный аккаунт: %s', $accountName));
+        $this->bot->reply(sprintf('Welcome. Selected account: %s', $accountName));
     }
 }

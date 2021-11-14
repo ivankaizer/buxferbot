@@ -9,9 +9,9 @@ class Add extends AbstractSaveAction
     public function signature(): array
     {
         return [
-            'add <сумма> <описание>',
-            'a <сумма> <описание>',
-            '- <сумма> <описание>',
+            'add <amount> <description>',
+            'a <amount> <description>',
+            '- <amount> <description>',
         ];
     }
 
@@ -27,6 +27,6 @@ class Add extends AbstractSaveAction
 
     protected function getSavedText(): string
     {
-        return 'Сохранено';
+        return 'Saved';
     }
 }

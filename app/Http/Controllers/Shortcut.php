@@ -14,8 +14,8 @@ class Shortcut extends Action
     public function signature(): array
     {
         return [
-            'shortcut <сокращение>',
-            's <сокращение>',
+            'shortcut <shortcut>',
+            's <shortcut>',
         ];
     }
 
@@ -28,7 +28,7 @@ class Shortcut extends Action
         $existingShortcut = auth()->user()->shortcuts()->where('short_name', $formattedKeyword)->first();
 
         if ($existingShortcut) {
-            $this->bot->reply('Сокращение уже существует. ' . $existingShortcut->short_name . ': ' . $existingShortcut->category_name);
+            $this->bot->reply('Shortcut already exists. ' . $existingShortcut->short_name . ': ' . $existingShortcut->category_name);
             return;
         }
 
@@ -40,6 +40,6 @@ class Shortcut extends Action
                     ->value(sprintf('%s %s %s', '__add_shortcut', $formattedKeyword, $category));
             })->toArray();
 
-        $this->bot->reply(Question::create('Выбери категорию')->addButtons($buttons));
+        $this->bot->reply(Question::create('Pick a category')->addButtons($buttons));
     }
 }

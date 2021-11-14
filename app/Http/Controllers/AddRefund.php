@@ -21,6 +21,6 @@ class AddRefund extends Action
         $transaction = $this->transactionCreator->create('refund', $context->getAmount(), $categoryName, $context->getDescription());
         $this->apiService->addTransaction($transaction);
 
-        $this->bot->reply(sprintf('Сохранено возврат %s в %s с описанием: %s', $context->getAmount(), $categoryName, $context->getDescription()));
+        $this->bot->reply(sprintf('Saved refund %s in %s with description: %s', $context->getAmount(), $categoryName, $context->getDescription()));
     }
 }

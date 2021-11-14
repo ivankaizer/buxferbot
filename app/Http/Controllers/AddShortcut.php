@@ -19,6 +19,6 @@ class AddShortcut extends Action
             'category_name' => $context->getCategory()
         ]);
 
-        $this->bot->reply(sprintf('Сохранено сокращение %s: %s', $context->getKeyword(), $context->getCategory()));
+        $this->bot->reply(sprintf('Saved shortcut %s: %s', $context->getKeyword(), $context->getCategory()));
     }
 }

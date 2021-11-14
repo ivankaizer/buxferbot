@@ -92,7 +92,7 @@ abstract class Action
 
     public function unclearContextReply(): string
     {
-        return "Не понимаю. Попробуй: \n\n" . $this->helpMessage();
+        return "Command not found. Try: \n\n" . $this->helpMessage();
     }
 
     public function helpMessage(): string

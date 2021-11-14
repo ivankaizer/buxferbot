@@ -9,9 +9,9 @@ class Refund extends AbstractSaveAction
     public function signature(): array
     {
         return [
-            'refund <сумма> <описание>',
-            'r <сумма> <описание>',
-            '+ <сумма> <описание>',
+            'refund <amount> <description>',
+            'r <amount> <description>',
+            '+ <amount> <description>',
         ];
     }
 
@@ -27,6 +27,6 @@ class Refund extends AbstractSaveAction
 
     protected function getSavedText(): string
     {
-        return 'Сохранено возврат';
+        return 'Refund saved';
     }
 }
